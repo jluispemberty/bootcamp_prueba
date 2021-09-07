@@ -8,7 +8,7 @@ function App() {
 
   const getListItems = useCallback(async () => {
     try {
-      const items: any[] = await sp.web.lists.getByTitle('Personas').select('Title, ID, Identificacion').items.get();
+      const items: any[] = await sp.web.lists.getByTitle('Personas').items.select('Title, ID, Nacionalidad/Title, ContentType/Name').expand('Nacionalidad, ContentType').filter(`Nacionalidad/Title eq 'Colombia'`).orderBy('ID', false).top(3).get();
       setItems(items);
     } catch (error) {
       console.log(error);
@@ -31,7 +31,8 @@ function App() {
 
         <ul>
 
-        {items.map((x, index) => <li key={`key-${index}`}>{x.Title}</li>)}
+        {items.map((x, index) => <li key={`key-${index}`}>{x.ContentType.Name}: {x.Title}, Nacionalidad: {x.Nacionalidad.Title}</li>)}
+        
 
         </ul>
 
